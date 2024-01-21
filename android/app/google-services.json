@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "819029146934",
+    "project_id": "income-insight",
+    "storage_bucket": "income-insight.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:819029146934:android:3cae1b09f935ca67244797",
+        "android_client_info": {
+          "package_name": "com.example.income_insight"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCloLhq6fmVVfhq5fNw6IQokb5-_jyGhw0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
