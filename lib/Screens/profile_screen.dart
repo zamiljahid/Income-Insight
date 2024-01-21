@@ -34,8 +34,15 @@ class ProfileScreen extends StatelessWidget {
             shape: BoxShape.circle,
             color: Colors.transparent,
             border: Border.all(
-                width: 5,
+                width: 2,
                 color: Colors.green),
+            boxShadow: [
+              BoxShadow(
+                color: const Color(0xFF008506).withAlpha(99),
+                blurRadius: 9.0,
+                spreadRadius: 7.0,
+              ),
+            ],
           ),
           child: ClipRRect(
             borderRadius: BorderRadius.circular(100),
