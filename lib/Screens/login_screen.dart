@@ -1,10 +1,13 @@
 import 'dart:developer';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:form_validator/form_validator.dart';
 import 'package:income_insight/Screens/dashboard.dart';
+import 'package:income_insight/Screens/reset_password_screen.dart';
 import 'package:lottie/lottie.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -23,6 +26,9 @@ class _LoginScreenState extends State<LoginScreen> {
   bool passwordVisible = false;
 
   bool isLoading = false;
+  final User? currentUser = FirebaseAuth.instance.currentUser;
+
+  SharedPreferences? _prefs;
 
   final _formKey = GlobalKey<FormState>();
 
@@ -65,6 +71,7 @@ class _LoginScreenState extends State<LoginScreen> {
         setState(() {
           isLoading = false;
         });
+
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => const DashboardScreen()),
@@ -75,27 +82,9 @@ class _LoginScreenState extends State<LoginScreen> {
           isLoading = false;
         });
         displayMessageToUser(error.toString(), context);
+        print(error.toString());
       });
     }
-
-    // showDialog(
-    //   context: context,
-    //   builder: (context) => const Center(
-    //     child: CircularProgressIndicator(
-    //       color: Colors.lightGreenAccent,
-    //       backgroundColor: Colors.green,
-    //     ),
-    //   ),
-    // );
-    // try {
-
-    // } on FirebaseAuthException catch (e) {
-    //   Navigator.pop(context);
-    //
-    //   displayMessageToUser(e.code, context);
-    //
-    //   print(e.message);
-    // }
   }
 
   @override
@@ -111,7 +100,7 @@ class _LoginScreenState extends State<LoginScreen> {
               child: Column(
                 children: [
                   SizedBox(
-                    height: 20,
+                    height: 10,
                   ),
                   Padding(
                     padding: const EdgeInsets.only(top: 18.0),
@@ -132,7 +121,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     style: TextStyle(fontSize: 28, color: Colors.green),
                   ),
                   const SizedBox(
-                    height: 15,
+                    height: 10,
                   ),
                   Padding(
                     padding: const EdgeInsets.all(10),
@@ -160,7 +149,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
                   const SizedBox(
-                    height: 15,
+                    height: 5,
                   ),
                   Padding(
                     padding: const EdgeInsets.all(10),
@@ -202,8 +191,18 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ),
                   ),
+                  GestureDetector(
+                    behavior: HitTestBehavior.opaque,
+                    onTap: (){
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => ResetPasswordScreen()),
+                      );
+                    },
+                    child: Text("Forgot password?"),
+                  ),
                   const SizedBox(
-                    height: 25,
+                    height: 15,
                   ),
                   SizedBox(
                     width: 200,
@@ -220,6 +219,20 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ),
                   ),
+                  SizedBox(height: 60,),
+                  Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Image.asset('assets/images/CompanyLogo.png', height: 20, width: 20,),
+                        Text(
+                          'Orine Technology ',
+                          style: TextStyle(color: Colors.black, fontSize: 12),
+                        ),
+                      ],
+                    ),
+                  )
                 ],
               ),
             ),
@@ -232,7 +245,8 @@ class _LoginScreenState extends State<LoginScreen> {
                   backgroundColor: Colors.green,
                 ),
               ),
-            )
+            ),
+
           ],
         ),
       ),
