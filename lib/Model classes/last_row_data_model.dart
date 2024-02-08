@@ -15,8 +15,8 @@ class LastRowData {
 
 
   factory LastRowData.fromJson(Map<String, dynamic> json) {
-    String formattedDate = DateFormat('MMMM yyyy', 'en_US').format(
-      DateTime.parse(json['monthYear']).add(Duration(days: 30)),
+    String formattedDate = DateFormat('MMMM yyyy', ).format(
+      DateTime.parse(json['monthYear']),
     );
     return LastRowData(
       monthYear: formattedDate,

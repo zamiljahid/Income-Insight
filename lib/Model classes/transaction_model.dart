@@ -1,5 +1,3 @@
-
-
 class Transaction {
   final String date;
   final int amount;

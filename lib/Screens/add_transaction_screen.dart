@@ -65,7 +65,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
     });
 
     const url =
-        'https://script.google.com/macros/s/AKfycbzZehIrXTfvhjh5s1EeLPpsdetWfXAIYYb5M_xzLi2iw5NveWARKFk4LpEUP-VINjIH/exec';
+        'https://script.google.com/macros/s/AKfycbw-eoNzVfCbCodk5wAlMMJ7MljwpGEnyw7auI7uNzn_sWa1SYUOTLL6v8j-p9axmn-q/exec';
 
     await http.post(
       Uri.parse(url),

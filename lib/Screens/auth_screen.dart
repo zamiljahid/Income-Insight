@@ -1,10 +1,7 @@
-import 'dart:async';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:income_insight/Screens/dashboard.dart';
 import 'package:income_insight/Screens/login_screen.dart';
-import 'package:lottie/lottie.dart';
 
 
 class AuthScreen extends StatefulWidget {
@@ -22,7 +19,7 @@ class _AuthScreenState extends State<AuthScreen> {
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (context, snapshot){
           if(snapshot.hasData){
-            return  DashboardScreen();
+            return  const DashboardScreen();
           }
           else{
             return const LoginScreen();

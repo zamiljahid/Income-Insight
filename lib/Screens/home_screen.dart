@@ -1,10 +1,7 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-
-import 'dart:convert';
-import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
-
 import '../Model classes/last_row_data_model.dart';
 import '../Model classes/transaction_model.dart';
 import '../api_helper.dart';
@@ -12,7 +9,7 @@ import '../api_helper.dart';
 
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+  const HomeScreen({super.key});
 
   @override
   _HomeScreenState createState() => _HomeScreenState();
@@ -22,7 +19,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<LastRowData>? _lastRowData;
   List<Transaction> transactions = [];
   String empName = "";
-  RefreshController _refreshController =
+  final RefreshController _refreshController =
   RefreshController(initialRefresh: false);
 
 
@@ -53,7 +50,9 @@ class _HomeScreenState extends State<HomeScreen> {
         transactions = result;
       });
     } catch (e) {
-      print('Error: $e');
+      if (kDebugMode) {
+        print('Error: $e');
+      }
       // Handle error as needed
     }
   }
@@ -70,7 +69,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void> _refreshData() async {
-    await Future.delayed(Duration(seconds: 2)); // Simulate network delay
+    await Future.delayed(const Duration(seconds: 2)); // Simulate network delay
     loadTransactions(empName);
     _lastRowData = ApiHelper.getLastRowData();
     _refreshController.refreshCompleted();
@@ -81,13 +80,13 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text('B A L A N C E'),
+        title: const Text('B A L A N C E'),
         centerTitle: true,
       ),
       body: SmartRefresher(
         enablePullDown: true,
         enablePullUp: true,
-        header: WaterDropHeader(
+        header: const WaterDropHeader(
           waterDropColor: Colors.green,
         ),
         // color:  Colors.green,
@@ -98,7 +97,7 @@ class _HomeScreenState extends State<HomeScreen> {
           future: _lastRowData,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(
+              return const Center(
                 child: CircularProgressIndicator(
                   strokeWidth: 6,
                   color: Colors.lightGreenAccent,
@@ -115,98 +114,6 @@ class _HomeScreenState extends State<HomeScreen> {
                     padding: const EdgeInsets.all(8.0),
                     child: Container(
                       height: 200,
-                      child: Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Text('${lastRowData.monthYear}',
-                                style: TextStyle(color: Colors.white,
-                                    fontSize: 16)),
-                            Text(
-                              'BDT ${lastRowData.currentBalance}',
-                              style: TextStyle(color: Colors.white, fontSize: 40),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Row(
-                                    children: [
-                                      Container(
-                                        padding: EdgeInsets.all(10),
-                                        decoration: BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          color: Colors.white,
-                                        ),
-                                        child: Center(
-                                          child: Icon(
-                                            Icons.arrow_upward,
-                                            color: Colors.green,
-                                          ),
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        width: 10,
-                                      ),
-                                      Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          Text('Income',
-                                              style: TextStyle(
-                                                  color: Colors.white)),
-                                          SizedBox(
-                                            height: 5,
-                                          ),
-                                          Text('BDT ${lastRowData.totalIncome}',
-                                              style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontWeight: FontWeight.bold)),
-                                        ],
-                                      )
-                                    ],
-                                  ),
-                                  Row(
-                                    children: [
-                                      Container(
-                                        padding: EdgeInsets.all(10),
-                                        decoration: BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          color: Colors.white,
-                                        ),
-                                        child: Center(
-                                          child: Icon(
-                                            Icons.arrow_downward,
-                                            color: Colors.red,
-                                          ),
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        width: 10,
-                                      ),
-                                      Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          Text('Expense',
-                                              style: TextStyle(
-                                                  color: Colors.white)),
-                                          SizedBox(
-                                            height: 5,
-                                          ),
-                                          Text('BDT ${lastRowData.totalExpense}',
-                                              style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontWeight: FontWeight.bold)),
-                                        ],
-                                      )
-                                    ],
-                                  )
-                                ],
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(15),
                           color: Colors.green,
@@ -222,6 +129,98 @@ class _HomeScreenState extends State<HomeScreen> {
                                 blurRadius: 15.0,
                                 spreadRadius: 1.0),
                           ]),
+                      child: Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Text(lastRowData.monthYear,
+                                style: const TextStyle(color: Colors.white,
+                                    fontSize: 16)),
+                            Text(
+                              'BDT ${lastRowData.currentBalance}',
+                              style: const TextStyle(color: Colors.white, fontSize: 40),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Row(
+                                    children: [
+                                      Container(
+                                        padding: const EdgeInsets.all(10),
+                                        decoration: const BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          color: Colors.white,
+                                        ),
+                                        child: const Center(
+                                          child: Icon(
+                                            Icons.arrow_upward,
+                                            color: Colors.green,
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        width: 10,
+                                      ),
+                                      Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          const Text('Income',
+                                              style: TextStyle(
+                                                  color: Colors.white)),
+                                          const SizedBox(
+                                            height: 5,
+                                          ),
+                                          Text('BDT ${lastRowData.totalIncome}',
+                                              style: const TextStyle(
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.bold)),
+                                        ],
+                                      )
+                                    ],
+                                  ),
+                                  Row(
+                                    children: [
+                                      Container(
+                                        padding: const EdgeInsets.all(10),
+                                        decoration: const BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          color: Colors.white,
+                                        ),
+                                        child: const Center(
+                                          child: Icon(
+                                            Icons.arrow_downward,
+                                            color: Colors.red,
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        width: 10,
+                                      ),
+                                      Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          const Text('Expense',
+                                              style: TextStyle(
+                                                  color: Colors.white)),
+                                          const SizedBox(
+                                            height: 5,
+                                          ),
+                                          Text('BDT ${lastRowData.totalExpense}',
+                                              style: const TextStyle(
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.bold)),
+                                        ],
+                                      )
+                                    ],
+                                  )
+                                ],
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
                     ),
                   ),
                   const Padding(
@@ -247,7 +246,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               return Center(child: Text('Error: ${snapshot.error}'));
                             } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
                               // No transactions
-                              return Center(child: Text('Transaction history is empty'));
+                              return const Center(child: Text('Transaction history is empty'));
                             } else {
                               // Display transactions
                               List<Transaction> transactions = snapshot.data!;
@@ -291,7 +290,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ],
               );
             } else {
-              return Center(child: Text('No Data'));
+              return const Center(child: Text('No Data'));
             }
           },
         ),

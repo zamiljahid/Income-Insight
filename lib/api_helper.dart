@@ -9,14 +9,17 @@ import 'Model classes/transaction_model.dart';
 
 
 class ApiHelper {
-  static final String baseUrl = 'https://script.google.com/macros/s/AKfycbzZehIrXTfvhjh5s1EeLPpsdetWfXAIYYb5M_xzLi2iw5NveWARKFk4LpEUP-VINjIH/exec';
+  static final String baseUrl = 'https://script.google.com/macros/s/AKfycbw-eoNzVfCbCodk5wAlMMJ7MljwpGEnyw7auI7uNzn_sWa1SYUOTLL6v8j-p9axmn-q/exec';
 
   static Future<LastRowData> getLastRowData() async {
     final response = await http.get(
         Uri.parse('$baseUrl?action=getLastRowData'));
 
     if (response.statusCode == 200) {
+      print(response.body);
+
       final Map<String, dynamic> jsonData = json.decode(response.body);
+      print(response.body);
       return LastRowData.fromJson(jsonData);
     } else {
       throw Exception('Failed to load last row data');
@@ -29,6 +32,7 @@ class ApiHelper {
 
     if (response.statusCode == 200) {
       final List<dynamic> jsonData = json.decode(response.body);
+      print(response.body);
 
       return jsonData.map((data) {
         return Transaction(

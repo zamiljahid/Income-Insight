@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
@@ -7,7 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'edit_profile_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
-  ProfileScreen({super.key});
+  const ProfileScreen({super.key});
 
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
@@ -31,7 +30,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   void initState() {
     load();
     _loadGender();
-
+    super.initState();
   }
 
   load() async {
@@ -74,19 +73,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
       barrierDismissible: false,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Select Your Gender'),
+          title: const Text('Select Your Gender'),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               ListTile(
-                title: Text('Male'),
+                title: const Text('Male'),
                 onTap: () {
                   _saveGender('male');
                   Navigator.of(context).pop();
                 },
               ),
               ListTile(
-                title: Text('Female'),
+                title: const Text('Female'),
                 onTap: () {
                   _saveGender('female');
                   Navigator.of(context).pop();
@@ -113,7 +112,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('P R O F I L E'),
+        title: const Text('P R O F I L E'),
         centerTitle: true,
         backgroundColor: Colors.transparent,
         actions: [
@@ -169,7 +168,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               empName.toString(),
               style: const TextStyle(fontSize: 24),
             ),
-            SizedBox(
+            const SizedBox(
               height: 15,
             ),
             Text(

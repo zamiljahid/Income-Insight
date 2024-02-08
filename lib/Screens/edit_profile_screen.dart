@@ -1,10 +1,6 @@
-import 'dart:convert';
-import 'dart:io';
-import 'dart:ui';
-import 'package:cloud_firestore/cloud_firestore.dart' as cloud_firestore;
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 
 import 'login_screen.dart';
 
@@ -39,9 +35,8 @@ class EditProfileScreen extends StatelessWidget {
                 await FirebaseAuth.instance.signOut();
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => LoginScreen()),
+                  MaterialPageRoute(builder: (context) => const LoginScreen()),
                 );
-                print(FirebaseAuth.instance.currentUser.toString());
               }
             },
             icon: const Icon(
@@ -55,17 +50,17 @@ class EditProfileScreen extends StatelessWidget {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text(
+          const Text(
             "Change Password",
             style: TextStyle(
               fontSize: 24,
             ),
           ),
-          SizedBox(
-            height: 30,
+          const SizedBox(
+            height: 10,
           ),
           Padding(
-            padding: const EdgeInsets.all(10),
+            padding: const EdgeInsets.only(top: 10, left: 30, right: 30),
             child: TextFormField(
               autovalidateMode: AutovalidateMode.onUserInteraction,
               validator: (value) => value!.length < 3
@@ -76,22 +71,30 @@ class EditProfileScreen extends StatelessWidget {
               controller: currentPasswordKeyController,
               cursorColor: Theme.of(context).canvasColor,
               obscureText: true,
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(
+              decoration:  InputDecoration(
+                focusedBorder: const OutlineInputBorder(
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(10.0),
+                  ),
+                  borderSide: BorderSide(
+                    color: Colors.yellow,
+                  ),
+                ),
+                border: const OutlineInputBorder(
                     borderRadius: BorderRadius.all(Radius.circular(10.0))),
                 filled: true,
-                fillColor: Colors.lightGreenAccent,
-                icon: Icon(
+                fillColor: Colors.green[200],
+                icon: const Icon(
                   Icons.lock,
                   size: 35,
                 ),
                 labelText: 'Current Password',
-                labelStyle: TextStyle(color: Colors.black87),
+                labelStyle: const TextStyle(color: Colors.black87),
               ),
             ),
           ),
           Padding(
-            padding: const EdgeInsets.all(10),
+            padding: const EdgeInsets.only(top: 10, left: 30, right: 30),
             child: TextFormField(
               autovalidateMode: AutovalidateMode.onUserInteraction,
               validator: (value) => value!.length < 6
@@ -102,21 +105,29 @@ class EditProfileScreen extends StatelessWidget {
               controller: newPasswordKeyController,
               cursorColor: Theme.of(context).canvasColor,
               obscureText: true,
-              decoration: InputDecoration(
-                border: OutlineInputBorder(
+              decoration:  InputDecoration(
+                focusedBorder: const OutlineInputBorder(
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(10.0),
+                  ),
+                  borderSide: BorderSide(
+                    color: Colors.yellow,
+                  ),
+                ),
+                border: const OutlineInputBorder(
                     borderRadius: BorderRadius.all(Radius.circular(10.0))),
                 filled: true,
-                fillColor: Colors.lightGreenAccent,
+                fillColor: Colors.green[200],
                 icon: const Icon(
                   Icons.lock,
                   size: 35,
                 ),
                 labelText: 'New Password',
-                labelStyle: TextStyle(color: Colors.black87),
+                labelStyle: const TextStyle(color: Colors.black87),
               ),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 30,
           ),
           SizedBox(
@@ -141,10 +152,12 @@ class EditProfileScreen extends StatelessWidget {
                   await FirebaseAuth.instance.signOut();
                   Navigator.pushReplacement(
                     context,
-                    MaterialPageRoute(builder: (context) => LoginScreen()),
+                    MaterialPageRoute(builder: (context) => const LoginScreen()),
                   );
                 } catch (e) {
-                  print("Error updating password: $e");
+                  if (kDebugMode) {
+                    print("Error updating password: $e");
+                  }
                 }
               },
               child: const Text(
@@ -163,20 +176,20 @@ class EditProfileScreen extends StatelessWidget {
       builder: (BuildContext context) {
         return AlertDialog(
           backgroundColor: Colors.green,
-          title: Text('Confirm Logout', style: TextStyle(color: Colors.white),),
-          content: Text('Are you sure you want to log out?', style: TextStyle(color: Colors.white)),
+          title: const Text('Confirm Logout', style: TextStyle(color: Colors.white),),
+          content: const Text('Are you sure you want to log out?', style: TextStyle(color: Colors.white)),
           actions: <Widget>[
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop(false); // Cancel logout
               },
-              child: Text('Cancel', style: TextStyle(color: Colors.white)),
+              child: const Text('Cancel', style: TextStyle(color: Colors.white)),
             ),
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop(true); // Confirm logout
               },
-              child: Text('Logout', style: TextStyle(color: Colors.white)),
+              child: const Text('Logout', style: TextStyle(color: Colors.white)),
             ),
           ],
         );
@@ -188,14 +201,14 @@ class EditProfileScreen extends StatelessWidget {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Password Updated'),
-          content: Text('Your password has been updated successfully.'),
+          title: const Text('Password Updated'),
+          content: const Text('Your password has been updated successfully.'),
           actions: <Widget>[
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: Text('OK'),
+              child: const Text('OK'),
             ),
           ],
         );

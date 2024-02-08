@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class ResetPasswordScreen extends StatelessWidget {
@@ -9,13 +10,13 @@ class ResetPasswordScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
-        title: Text('Reset Password'),
+        title: const Text('Reset Password'),
         leading: GestureDetector(
           behavior: HitTestBehavior.opaque,
           onTap: () {
             Navigator.pop(context);
           },
-          child: Icon(
+          child: const Icon(
             Icons.arrow_back,
             color: Colors.green,
           ),
@@ -30,9 +31,9 @@ class ResetPasswordScreen extends StatelessWidget {
               controller: _emailController,
               keyboardType: TextInputType.emailAddress,
               textInputAction: TextInputAction.next,
-              style: TextStyle(color: Colors.black),
+              style: const TextStyle(color: Colors.black),
               cursorColor: Theme.of(context).canvasColor,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 border: OutlineInputBorder(
                     borderRadius: BorderRadius.all(Radius.circular(10.0))),
                 filled: true,
@@ -45,7 +46,7 @@ class ResetPasswordScreen extends StatelessWidget {
                 labelStyle: TextStyle(color: Colors.black87),
               ),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.green),
@@ -58,37 +59,37 @@ class ResetPasswordScreen extends StatelessWidget {
                     context: context,
                     builder: (BuildContext context) {
                       return AlertDialog(
-                        title: Text('Password Reset Email Sent'),
+                        title: const Text('Password Reset Email Sent'),
                         content:
-                            Text('Check your email to reset your password.'),
+                        const Text('Check your email to reset your password.'),
                         actions: [
                           TextButton(
                             onPressed: () {
                               Navigator.pop(context);
                             },
-                            child: Text('OK'),
+                            child: const Text('OK'),
                           ),
                         ],
                       );
                     },
                   );
                 } catch (e) {
-                  print('Error sending password reset email: $e');
-
-                  // Show error message
+                  if (kDebugMode) {
+                    print('Error sending password reset email: $e');
+                  }
                   showDialog(
                     context: context,
                     builder: (BuildContext context) {
                       return AlertDialog(
-                        title: Text('Error'),
-                        content: Text(
+                        title: const Text('Error'),
+                        content: const Text(
                             'Failed to send password reset email. Please try again.'),
                         actions: [
                           TextButton(
                             onPressed: () {
                               Navigator.pop(context);
                             },
-                            child: Text('OK'),
+                            child: const Text('OK'),
                           ),
                         ],
                       );
@@ -96,7 +97,7 @@ class ResetPasswordScreen extends StatelessWidget {
                   );
                 }
               },
-              child: Text('Reset Password', style: TextStyle(color: Colors.white),),
+              child: const Text('Reset Password', style: TextStyle(color: Colors.white),),
             ),
           ],
         ),
