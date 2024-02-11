@@ -164,11 +164,19 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                 style: const TextStyle(color: Colors.black),
                 controller: _reasonController,
                 cursorColor: Colors.white,
-                decoration: const InputDecoration(
+                decoration:  InputDecoration(
+                  focusedBorder: const OutlineInputBorder(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(10.0),
+                    ),
+                    borderSide: BorderSide(
+                      color: Colors.yellow,
+                    ),
+                  ),
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.all(Radius.circular(10.0))),
                   filled: true,
-                  fillColor: Colors.lightGreenAccent,
+                  fillColor: Colors.green.shade200,
                   icon: Icon(
                     Icons.description,
                     size: 35,
@@ -196,7 +204,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                   border: const OutlineInputBorder(
                       borderRadius: BorderRadius.all(Radius.circular(10.0))),
                   filled: true,
-                  fillColor: Colors.lightGreenAccent,
+                  fillColor: Colors.green.shade200,
                   icon: const Icon(
                     Icons.money,
                     size: 35,
@@ -211,7 +219,10 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
               const SizedBox(height: 24),
               _isAddingTransaction
                   ? const Center(
-                      child: CircularProgressIndicator(),
+                      child: CircularProgressIndicator(
+                        color:  Colors.green,
+                        backgroundColor: Colors.lightGreenAccent,
+                      ),
                     )
                   : Center(
                     child: ElevatedButton(

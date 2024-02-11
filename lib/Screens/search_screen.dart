@@ -48,6 +48,14 @@ class _SearchScreenState extends State<SearchScreen> {
     super.initState();
     _searchController = TextEditingController();
     _searchOption = 'name'; // Default search option
+    _searchController!.addListener(_startSearch);
+  }
+
+  void _startSearch() {
+    setState(() {
+      _isLoading = true;
+      _searchResults = _searchTransactions(_searchController!.text);
+    });
   }
 
   Future<List<Transaction>> _searchTransactions(String query) async {
@@ -61,12 +69,16 @@ class _SearchScreenState extends State<SearchScreen> {
     }
 
     final response = await http.get(
-      Uri.parse('https://script.google.com/macros/s/AKfycbyiuFYnrwe93C5fGWEwuFgGGnCloS2_j8KEJv983_7L0le44plfFj15Zsb_2UzNrci-/exec?action=$endpoint&$_searchOption=$query'),
+      Uri.parse(
+          'https://script.google.com/macros/s/AKfycbyiuFYnrwe93C5fGWEwuFgGGnCloS2_j8KEJv983_7L0le44plfFj15Zsb_2UzNrci-/exec?action=$endpoint&$_searchOption=$query'),
     );
 
     print(response.body);
 
     if (response.statusCode == 200) {
+      setState(() {
+        _isLoading = false;
+      });
       List<dynamic> jsonResponse = json.decode(response.body);
       return jsonResponse.map((data) => Transaction.fromJson(data)).toList();
     } else {
@@ -76,113 +88,122 @@ class _SearchScreenState extends State<SearchScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Search Transactions'),
-        centerTitle: true,
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        children: [
+          AppBar(
+            title: Text('Search Transactions'),
+            centerTitle: true,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Radio(
+                activeColor: Colors.green,
+                value: 'name',
+                groupValue: _searchOption,
+                onChanged: (value) {
+                  setState(() {
+                    _searchOption = 'name';
+                  });
+                },
+              ),
+              Text('Search by Name'),
+              SizedBox(width: 20),
+              Radio(
+                activeColor: Colors.green,
+                value: 'date',
+                groupValue: _searchOption,
+                onChanged: (value) {
+                  setState(() {
+                    _searchOption = 'date';
+                  });
+                },
+              ),
+              Text('Search by Date'),
+            ],
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          TextField(
+            controller: _searchController,
+            decoration: InputDecoration(
+              focusedBorder: const OutlineInputBorder(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(10.0),
+                ),
+                borderSide: BorderSide(
+                  color: Colors.yellow,
+                ),
+              ),
+              filled: true,
+              fillColor: Colors.green.shade200,
+              border: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(10.0))),
+              labelText: _searchOption == 'name'
+                  ? 'Enter Name'
+                  : 'Enter Date (YYYY-MM-DD)',
+            ),
+          ),
+          const SizedBox(height: 20),
+          _isLoading
+              ? const CircularProgressIndicator(
+                  color: Colors.green,
+                  backgroundColor: Colors.lightGreenAccent,
+                )
+              : FutureBuilder<List<Transaction>>(
+                  future: _searchResults,
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return CircularProgressIndicator();
+                    } else if (snapshot.hasError) {
+                      return Text('Error: ${snapshot.error}');
+                    } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                      return Text('No results found.');
+                    } else {
+                      List<Transaction> transactions = snapshot.data!;
+                      _isLoading = false;
+                      return Expanded(
+                        child: ListView.builder(
+                          itemCount: transactions.length,
+                          itemBuilder: (context, index) {
+                            return Padding(
+                              padding:
+                                  const EdgeInsets.only(right: 10, left: 10),
+                              child: Card(
+                                color: Colors.grey[100],
+                                child: ListTile(
+                                  title: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                          'Reason: ${transactions[index].reason}'),
+                                      Text('Date: ${transactions[index].date}'),
+                                    ],
+                                  ),
+                                  trailing: Text(
+                                    '${transactions[index].type == 'Income' ? '+' : '-'}BDT ${transactions[index].amount.toStringAsFixed(2)}',
+                                    style: TextStyle(
+                                      color:
+                                          transactions[index].type == 'Income'
+                                              ? Colors.green
+                                              : Colors.red,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      );
+                    }
+                  },
+                ),
+        ],
       ),
-      body: Center(child: Text('COMING SOON'))
-
-      // Padding(
-      //   padding: const EdgeInsets.all(16.0),
-      //   child: Column(
-      //     children: [
-      //       Row(
-      //         mainAxisAlignment: MainAxisAlignment.center,
-      //         children: [
-      //           Radio(
-      //             value: 'name',
-      //             groupValue: _searchOption,
-      //             onChanged: (value) {
-      //               setState(() {
-      //                 _searchOption = 'name';
-      //               });
-      //             },
-      //           ),
-      //           Text('Search by Name'),
-      //           SizedBox(width: 20),
-      //           Radio(
-      //             value: 'date',
-      //             groupValue: _searchOption,
-      //             onChanged: (value) {
-      //               setState(() {
-      //                 _searchOption = 'date';
-      //               });
-      //             },
-      //           ),
-      //           Text('Search by Date'),
-      //         ],
-      //       ),
-      //       TextField(
-      //         controller: _searchController,
-      //         decoration: InputDecoration(
-      //           labelText: _searchOption == 'name' ? 'Enter Name' : 'Enter Date (YYYY-MM-DD)',
-      //         ),
-      //       ),
-      //       const SizedBox(height: 20),
-      //       ElevatedButton(
-      //         onPressed: () {
-      //           setState(() {
-      //             _isLoading = true;
-      //             _searchResults = _searchTransactions(_searchController!.text);
-      //           });
-      //         },
-      //         child: Text('Search'),
-      //       ),
-      //       SizedBox(height: 20),
-      //       _isLoading
-      //           ? const CircularProgressIndicator()
-      //           : Expanded(
-      //         child: FutureBuilder<List<Transaction>>(
-      //           future: _searchResults,
-      //           builder: (context, snapshot) {
-      //             if (snapshot.connectionState == ConnectionState.waiting) {
-      //               return CircularProgressIndicator();
-      //             } else if (snapshot.hasError) {
-      //               return Text('Error: ${snapshot.error}');
-      //             } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-      //               return Text('No results found.');
-      //             } else {
-      //               List<Transaction> transactions = snapshot.data!;
-      //               _isLoading = false;
-      //               return Expanded(
-      //                 child: ListView.builder(
-      //                   itemCount: transactions.length,
-      //                   itemBuilder: (context, index) {
-      //                     return Padding(
-      //                       padding: const EdgeInsets.only(right: 10, left: 10),
-      //                       child: Card(
-      //                         color: Colors.grey[100],
-      //                         child: ListTile(
-      //                           title: Column(
-      //                             crossAxisAlignment: CrossAxisAlignment.start,
-      //                             children: [
-      //                               Text('Reason: ${transactions[index].reason}'),
-      //                               Text('Date: ${transactions[index].date}'),
-      //                             ],
-      //                           ),
-      //                           trailing: Text(
-      //                             '${transactions[index].type == 'Income' ? '+' : '-'}BDT ${transactions[index].amount.toStringAsFixed(2)}',
-      //                             style: TextStyle(
-      //                               color: transactions[index].type == 'Income'
-      //                                   ? Colors.green
-      //                                   : Colors.red,
-      //                             ),
-      //                           ),
-      //                         ),
-      //                       ),
-      //                     );
-      //                   },
-      //                 ),
-      //               );
-      //             }
-      //           },
-      //         ),
-      //       ),
-      //     ],
-      //   ),
-      // ),
     );
   }
 }
-

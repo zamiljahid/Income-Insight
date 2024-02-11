@@ -56,57 +56,61 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset : false,
-      backgroundColor: Colors.white,
-      body: FutureBuilder<DocumentSnapshot<Map<String, dynamic>>>(
-        future: getUserDetails(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(
-              child: CircularProgressIndicator(
-                strokeWidth: 6,
-                color: Colors.lightGreenAccent,
-                backgroundColor: Colors.green,
+    return SafeArea(
+      child: Scaffold(
+        resizeToAvoidBottomInset: false
+      ,
+        backgroundColor: Colors.white,
+        // extendBody: true,
+        body: FutureBuilder<DocumentSnapshot<Map<String, dynamic>>>(
+          future: getUserDetails(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(
+                child: CircularProgressIndicator(
+                  strokeWidth: 6,
+                  color: Colors.lightGreenAccent,
+                  backgroundColor: Colors.green,
+                ),
+              );
+            } else if (snapshot.hasError) {
+              return Text("Error: ${snapshot.hasError}");
+            } else if (snapshot.hasData) {
+              Map<String, dynamic>? user = snapshot.data!.data();
+              initSharedPreferences(); // Initialize SharedPreferences
+              _prefs?.setString('emp_name', user!['displayName']);
+              _prefs?.setString('emp_pos', user!['position']);
+              _prefs?.setString('emp_id', user!['id']);
+              return screen[index];
+            } else {
+              return Text("No Data to Display");
+            }
+          },
+        ),
+        bottomNavigationBar: Container(
+            height: 75,
+            decoration: const BoxDecoration(
+              color: Colors.lightGreen,
+              borderRadius: BorderRadius.only(
+                  topRight: Radius.circular(30), topLeft: Radius.circular(30)),
+            ),
+            child: ClipRRect(
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(30.0),
+                topRight: Radius.circular(30.0),
               ),
-            );
-          } else if (snapshot.hasError) {
-            return Text("Error: ${snapshot.hasError}");
-          } else if (snapshot.hasData) {
-            Map<String, dynamic>? user = snapshot.data!.data();
-            initSharedPreferences(); // Initialize SharedPreferences
-            _prefs?.setString('emp_name', user!['displayName']);
-            _prefs?.setString('emp_pos', user!['position']);
-            _prefs?.setString('emp_id', user!['id']);
-            return screen[index];
-          } else {
-            return Text("No Data to Display");
-          }
-        },
+              child: CurvedNavigationBar(
+                index: index,
+                height: 60,
+                color: Colors.green.shade600,
+                buttonBackgroundColor: Colors.green.shade900,
+                backgroundColor: Colors.transparent,
+                animationDuration: const Duration(milliseconds: 300),
+                items: items,
+                onTap: (index) => setState(() => this.index = index),
+              ),
+            )),
       ),
-      bottomNavigationBar: Container(
-          height: 75,
-          decoration: BoxDecoration(
-            color: Colors.lightGreen,
-            borderRadius: BorderRadius.only(
-                topRight: Radius.circular(30), topLeft: Radius.circular(30)),
-          ),
-          child: ClipRRect(
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(30.0),
-              topRight: Radius.circular(30.0),
-            ),
-            child: CurvedNavigationBar(
-              index: index,
-              height: 60,
-              color: Colors.green.shade600,
-              buttonBackgroundColor: Colors.green.shade900,
-              backgroundColor: Colors.transparent,
-              animationDuration: const Duration(milliseconds: 300),
-              items: items,
-              onTap: (index) => setState(() => this.index = index),
-            ),
-          )),
     );
   }
 }

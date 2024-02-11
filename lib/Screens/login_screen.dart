@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:income_insight/Screens/dashboard.dart';
 import 'package:income_insight/Screens/reset_password_screen.dart';
 import 'package:lottie/lottie.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -20,6 +21,8 @@ class _LoginScreenState extends State<LoginScreen> {
   TextEditingController loginIdKeyController = TextEditingController();
   TextEditingController passwordKeyController = TextEditingController();
   bool passwordVisible = false;
+  String? version;
+
 
   bool isLoading = false;
   final User? currentUser = FirebaseAuth.instance.currentUser;
@@ -41,9 +44,21 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   void initState() {
     super.initState();
+    checkVersion();
     passwordVisible = false;
   }
 
+  checkVersion() async {
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+
+    String appName = packageInfo.appName;
+    String packageName = packageInfo.packageName;
+    String buildNumber = packageInfo.buildNumber;
+
+    setState(() {
+      version = packageInfo.version;
+    });
+  }
   void displayMessageToUser(String message, BuildContext context) {
     showDialog(
         context: context,
@@ -71,7 +86,6 @@ class _LoginScreenState extends State<LoginScreen> {
           context,
           MaterialPageRoute(builder: (context) => const DashboardScreen()),
         );
-        // if (context.mounted) Navigator.pop(context);
       }, onError: (error) {
         setState(() {
           isLoading = false;
@@ -237,7 +251,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ),
                     const SizedBox(
-                      height: 60,
+                      height: 50,
                     ),
                     Align(
                       alignment: Alignment.bottomCenter,
@@ -246,15 +260,26 @@ class _LoginScreenState extends State<LoginScreen> {
                         children: [
                           Image.asset(
                             'assets/images/CompanyLogo.png',
-                            height: 20,
-                            width: 20,
+                            height: 30,
+                            width: 30,
                           ),
                           const Text(
                             'Orine',
-                            style: TextStyle(color: Colors.black, fontSize: 12),
+                            style: TextStyle(color: Colors.black, fontSize: 16),
                           ),
                         ],
                       ),
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                     Align(
+                      alignment: Alignment.bottomCenter,
+                      child: version != null ? Text(
+                        "Version ${version}",
+                        style: const TextStyle(color: Colors.black, fontSize: 10),
+                      ) : Text(
+                        " ",),
                     )
                   ],
                 ),

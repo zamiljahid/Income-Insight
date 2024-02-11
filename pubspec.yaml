@@ -1,8 +1,6 @@
 name: income_insight
 description: "A new Flutter project."
 
-publish_to: 'none' # Remove this line if you wish to publish to pub.dev
-
 version: 1.0.0+1
 
 environment:
@@ -31,6 +29,7 @@ dependencies:
   pull_to_refresh: ^2.0.0
   internet_connection_checker: ^1.0.0+1
   connectivity_plus: ^5.0.2
+  package_info_plus: ^5.0.1
 
 flutter_launcher_icons:
   android: true
