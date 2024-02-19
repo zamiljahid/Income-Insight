@@ -9,6 +9,8 @@ import 'package:income_insight/Screens/profile_screen.dart';
 import 'package:income_insight/Screens/search_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../wrapper.dart';
+
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
 
@@ -19,6 +21,7 @@ class DashboardScreen extends StatefulWidget {
 final User? currentUser = FirebaseAuth.instance.currentUser;
 
 SharedPreferences? _prefs;
+
 
 Future<void> initSharedPreferences() async {
   _prefs = await SharedPreferences.getInstance();
@@ -56,10 +59,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
+    return Wrapper(
       child: Scaffold(
-        resizeToAvoidBottomInset: false
-      ,
+        resizeToAvoidBottomInset: false,
         backgroundColor: Colors.white,
         // extendBody: true,
         body: FutureBuilder<DocumentSnapshot<Map<String, dynamic>>>(

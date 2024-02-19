@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:income_insight/wrapper.dart';
 import 'package:intl/intl.dart';
 
 class Transaction {
@@ -70,7 +71,7 @@ class _SearchScreenState extends State<SearchScreen> {
 
     final response = await http.get(
       Uri.parse(
-          'https://script.google.com/macros/s/AKfycbyiuFYnrwe93C5fGWEwuFgGGnCloS2_j8KEJv983_7L0le44plfFj15Zsb_2UzNrci-/exec?action=$endpoint&$_searchOption=$query'),
+          'https://script.google.com/macros/s/AKfycbw3NTP4auoFUMBlqw4ZBm4lYREc4y29S8JtRpjQ41AgWw3sfp-gcvdcE7Wfbqts6yof/exec?action=$endpoint&$_searchOption=$query'),
     );
 
     print(response.body);
@@ -88,121 +89,131 @@ class _SearchScreenState extends State<SearchScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
-        children: [
-          AppBar(
-            title: Text('Search Transactions'),
-            centerTitle: true,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Radio(
-                activeColor: Colors.green,
-                value: 'name',
-                groupValue: _searchOption,
-                onChanged: (value) {
-                  setState(() {
-                    _searchOption = 'name';
-                  });
-                },
-              ),
-              Text('Search by Name'),
-              SizedBox(width: 20),
-              Radio(
-                activeColor: Colors.green,
-                value: 'date',
-                groupValue: _searchOption,
-                onChanged: (value) {
-                  setState(() {
-                    _searchOption = 'date';
-                  });
-                },
-              ),
-              Text('Search by Date'),
-            ],
-          ),
-          SizedBox(
-            height: 10,
-          ),
-          TextField(
-            controller: _searchController,
-            decoration: InputDecoration(
-              focusedBorder: const OutlineInputBorder(
-                borderRadius: BorderRadius.all(
-                  Radius.circular(10.0),
-                ),
-                borderSide: BorderSide(
-                  color: Colors.yellow,
-                ),
-              ),
-              filled: true,
-              fillColor: Colors.green.shade200,
-              border: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(10.0))),
-              labelText: _searchOption == 'name'
-                  ? 'Enter Name'
-                  : 'Enter Date (YYYY-MM-DD)',
+    return Wrapper(
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            AppBar(
+              title: Text('Search Transactions'),
+              centerTitle: true,
             ),
-          ),
-          const SizedBox(height: 20),
-          _isLoading
-              ? const CircularProgressIndicator(
-                  color: Colors.green,
-                  backgroundColor: Colors.lightGreenAccent,
-                )
-              : FutureBuilder<List<Transaction>>(
-                  future: _searchResults,
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return CircularProgressIndicator();
-                    } else if (snapshot.hasError) {
-                      return Text('Error: ${snapshot.error}');
-                    } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                      return Text('No results found.');
-                    } else {
-                      List<Transaction> transactions = snapshot.data!;
-                      _isLoading = false;
-                      return Expanded(
-                        child: ListView.builder(
-                          itemCount: transactions.length,
-                          itemBuilder: (context, index) {
-                            return Padding(
-                              padding:
-                                  const EdgeInsets.only(right: 10, left: 10),
-                              child: Card(
-                                color: Colors.grey[100],
-                                child: ListTile(
-                                  title: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                          'Reason: ${transactions[index].reason}'),
-                                      Text('Date: ${transactions[index].date}'),
-                                    ],
-                                  ),
-                                  trailing: Text(
-                                    '${transactions[index].type == 'Income' ? '+' : '-'}BDT ${transactions[index].amount.toStringAsFixed(2)}',
-                                    style: TextStyle(
-                                      color:
-                                          transactions[index].type == 'Income'
-                                              ? Colors.green
-                                              : Colors.red,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Radio(
+                  activeColor: Colors.green,
+                  value: 'name',
+                  groupValue: _searchOption,
+                  onChanged: (value) {
+                    setState(() {
+                      _searchOption = 'name';
+                    });
+                  },
+                ),
+                Text('Search by Name'),
+                SizedBox(width: 20),
+                Radio(
+                  activeColor: Colors.green,
+                  value: 'date',
+                  groupValue: _searchOption,
+                  onChanged: (value) {
+                    setState(() {
+                      _searchOption = 'date';
+                    });
+                  },
+                ),
+                Text('Search by Date'),
+              ],
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            TextField(
+              controller: _searchController,
+              decoration: InputDecoration(
+                focusedBorder: const OutlineInputBorder(
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(10.0),
+                  ),
+                  borderSide: BorderSide(
+                    color: Colors.yellow,
+                  ),
+                ),
+                filled: true,
+                fillColor: Colors.green.shade200,
+                border: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(10.0))),
+                labelText: _searchOption == 'name'
+                    ? 'Enter Name'
+                    : 'Enter Date (YYYY-MM-DD)',
+                labelStyle: TextStyle(color: Colors.black)
+              ),
+            ),
+            const SizedBox(height: 14),
+            _isLoading
+                ? const CircularProgressIndicator(
+                    color: Colors.green,
+                    backgroundColor: Colors.lightGreenAccent,
+                  )
+                : FutureBuilder<List<Transaction>>(
+                    future: _searchResults,
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return CircularProgressIndicator(
+                          color: Colors.green,
+                          backgroundColor: Colors.lightGreenAccent,
+                        );
+                      } else if (snapshot.hasError) {
+                        return Text('Error: ${snapshot.error}');
+                      } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                        return Text('No results found.');
+                      } else {
+                        List<Transaction> transactions = snapshot.data!;
+                        _isLoading = false;
+                        return Expanded(
+                          child: ListView.builder(
+                            itemCount: transactions.length,
+                            itemBuilder: (context, index) {
+                              return Padding(
+                                padding:
+                                    const EdgeInsets.only(right: 10, left: 10),
+                                child: Card(
+                                  color: Colors.grey[100],
+                                  child: ListTile(
+                                    title: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                            'Name: ${transactions[index].name}',
+                                          style: TextStyle(fontWeight: FontWeight.bold),
+                                        ),
+                                        Text(
+                                            'Reason: ${transactions[index].reason}'),
+                                        Text( 'Date: ${DateFormat('dd MMMM yyyy').format(DateTime.parse(transactions[index].date))}',),
+                                      ],
+                                    ),
+                                    trailing: Text(
+                                      '${transactions[index].type == 'Income' ? '+' : '-'}BDT ${transactions[index].amount.toStringAsFixed(2)}',
+                                      style: TextStyle(
+                                        color:
+                                            transactions[index].type == 'Income'
+                                                ? Colors.green
+                                                : Colors.red,
+                                      ),
                                     ),
                                   ),
                                 ),
-                              ),
-                            );
-                          },
-                        ),
-                      );
-                    }
-                  },
-                ),
-        ],
+                              );
+                            },
+                          ),
+                        );
+                      }
+                    },
+                  ),
+          ],
+        ),
       ),
     );
   }

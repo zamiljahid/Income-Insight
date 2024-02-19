@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:income_insight/wrapper.dart';
 import 'package:lottie/lottie.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -110,79 +111,81 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('P R O F I L E'),
-        centerTitle: true,
-        backgroundColor: Colors.transparent,
-        actions: [
-          IconButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => EditProfileScreen()),
-              );
-            },
-            icon: const Icon(
-              Icons.settings,
-              color: Colors.green,
-              size: 35,
-            ),
-          ),
-        ],
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-
-            Container(
-              width: 200,
-              height: 200,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: Colors.transparent,
-                border: Border.all(width: 2, color: Colors.green),
-                boxShadow: [
-                  BoxShadow(
-                    color: const Color(0xFF008506).withAlpha(99),
-                    blurRadius: 9.0,
-                    spreadRadius: 7.0,
-                  ),
-                ],
+    return Wrapper(
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('P R O F I L E'),
+          centerTitle: true,
+          backgroundColor: Colors.transparent,
+          actions: [
+            IconButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => EditProfileScreen()),
+                );
+              },
+              icon: const Icon(
+                Icons.settings,
+                color: Colors.green,
+                size: 35,
               ),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(100),
-                child:
-                _selectedGender == 'male'
-                    ? Lottie.asset('animation/male.json', height: 200)
-                    : _selectedGender == 'female'
-                    ? Lottie.asset('animation/female.json', height: 200)
-                    : Container(),
-              ),
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            Text(
-              empName.toString(),
-              style: const TextStyle(fontSize: 24),
-            ),
-            const SizedBox(
-              height: 15,
-            ),
-            Text(
-              empPos.toString(),
-              style: const TextStyle(fontSize: 24),
-            ),
-            const SizedBox(
-              height: 15,
-            ),
-            Text(
-              empId.toString(),
-              style: const TextStyle(fontSize: 24),
             ),
           ],
+        ),
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+      
+              Container(
+                width: 200,
+                height: 200,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Colors.transparent,
+                  border: Border.all(width: 2, color: Colors.green),
+                  boxShadow: [
+                    BoxShadow(
+                      color: const Color(0xFF008506).withAlpha(99),
+                      blurRadius: 9.0,
+                      spreadRadius: 7.0,
+                    ),
+                  ],
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(100),
+                  child:
+                  _selectedGender == 'male'
+                      ? Lottie.asset('animation/male.json', height: 200)
+                      : _selectedGender == 'female'
+                      ? Lottie.asset('animation/female.json', height: 200)
+                      : Container(),
+                ),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              Text(
+                empName.toString(),
+                style: const TextStyle(fontSize: 24),
+              ),
+              const SizedBox(
+                height: 15,
+              ),
+              Text(
+                empPos.toString(),
+                style: const TextStyle(fontSize: 24),
+              ),
+              const SizedBox(
+                height: 15,
+              ),
+              Text(
+                empId.toString(),
+                style: const TextStyle(fontSize: 24),
+              ),
+            ],
+          ),
         ),
       ),
     );

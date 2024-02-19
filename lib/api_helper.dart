@@ -9,7 +9,7 @@ import 'Model classes/transaction_model.dart';
 
 
 class ApiHelper {
-  static final String baseUrl = 'https://script.google.com/macros/s/AKfycbw-eoNzVfCbCodk5wAlMMJ7MljwpGEnyw7auI7uNzn_sWa1SYUOTLL6v8j-p9axmn-q/exec';
+  static final String baseUrl = 'https://script.google.com/macros/s/AKfycbw3NTP4auoFUMBlqw4ZBm4lYREc4y29S8JtRpjQ41AgWw3sfp-gcvdcE7Wfbqts6yof/exec';
 
   static Future<LastRowData> getLastRowData() async {
     final response = await http.get(
