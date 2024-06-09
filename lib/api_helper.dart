@@ -16,10 +16,7 @@ class ApiHelper {
         Uri.parse('$baseUrl?action=getLastRowData'));
 
     if (response.statusCode == 200) {
-      print(response.body);
-
       final Map<String, dynamic> jsonData = json.decode(response.body);
-      print(response.body);
       return LastRowData.fromJson(jsonData);
     } else {
       throw Exception('Failed to load last row data');
@@ -32,8 +29,6 @@ class ApiHelper {
 
     if (response.statusCode == 200) {
       final List<dynamic> jsonData = json.decode(response.body);
-      print(response.body);
-
       return jsonData.map((data) {
         return Transaction(
           date: formatDate(data['date']),

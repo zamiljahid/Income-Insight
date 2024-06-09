@@ -1,14 +1,11 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:income_insight/wrapper.dart';
-import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import '../Model classes/last_row_data_model.dart';
 import '../Model classes/transaction_model.dart';
 import '../api_helper.dart';
-
-
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -22,8 +19,7 @@ class _HomeScreenState extends State<HomeScreen> {
   List<Transaction> transactions = [];
   String empName = "";
   final RefreshController _refreshController =
-  RefreshController(initialRefresh: false);
-
+      RefreshController(initialRefresh: false);
 
   @override
   void initState() {
@@ -137,16 +133,19 @@ class _HomeScreenState extends State<HomeScreen> {
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
                               Text(lastRowData.monthYear,
-                                  style: const TextStyle(color: Colors.white,
-                                      fontSize: 16)),
+                                  style: const TextStyle(
+                                      color: Colors.white, fontSize: 16)),
                               Text(
                                 'BDT ${lastRowData.currentBalance}',
-                                style: const TextStyle(color: Colors.white, fontSize: 40),
+                                style: const TextStyle(
+                                    color: Colors.white, fontSize: 40),
                               ),
                               Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 20.0),
                                 child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
                                     Row(
                                       children: [
@@ -167,7 +166,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                           width: 10,
                                         ),
                                         Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
                                           children: [
                                             const Text('Income',
                                                 style: TextStyle(
@@ -175,10 +175,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                             const SizedBox(
                                               height: 5,
                                             ),
-                                            Text('BDT ${lastRowData.totalIncome}',
+                                            Text(
+                                                'BDT ${lastRowData.totalIncome}',
                                                 style: const TextStyle(
                                                     color: Colors.white,
-                                                    fontWeight: FontWeight.bold)),
+                                                    fontWeight:
+                                                        FontWeight.bold)),
                                           ],
                                         )
                                       ],
@@ -202,7 +204,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                           width: 10,
                                         ),
                                         Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
                                           children: [
                                             const Text('Expense',
                                                 style: TextStyle(
@@ -210,10 +213,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                             const SizedBox(
                                               height: 5,
                                             ),
-                                            Text('BDT ${lastRowData.totalExpense}',
+                                            Text(
+                                                'BDT ${lastRowData.totalExpense}',
                                                 style: const TextStyle(
                                                     color: Colors.white,
-                                                    fontWeight: FontWeight.bold)),
+                                                    fontWeight:
+                                                        FontWeight.bold)),
                                           ],
                                         )
                                       ],
@@ -228,67 +233,88 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     const Padding(
                       padding: EdgeInsets.all(8.0),
-                      child: Text('Transaction History', style: TextStyle(fontSize: 18),),
+                      child: Text(
+                        'Transaction History',
+                        style: TextStyle(fontSize: 18),
+                      ),
                     ),
                     Expanded(
                       child: Column(
                         children: [
                           transactions.isEmpty
-                              ? const Center(child: Text('Transaction history is empty'))
+                              ? const Center(
+                                  child: Text('Transaction history is empty'))
                               : FutureBuilder<List<Transaction>>(
-                            future: ApiHelper.getTransactionsByName(empName),
-                            builder: (context, snapshot) {
-                              if (snapshot.connectionState == ConnectionState.waiting) {
-                                // Show a loading widget while data is being fetched
-                                return const Center(child: CircularProgressIndicator(
-                                  color:  Colors.green,
-                                  backgroundColor: Colors.lightGreenAccent,
-                                ));
-                              } else if (snapshot.hasError) {
-                                // Handle error case
-                                return Center(child: Text('Error: ${snapshot.error}'));
-                              } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                                // No transactions
-                                return const Center(child: Text('Transaction history is empty'));
-                              } else {
-                                // Display transactions
-                                List<Transaction> transactions = snapshot.data!;
-                                return Expanded(
-                                  child: ListView.builder(
-                                    itemCount: transactions.length,
-                                    itemBuilder: (context, index) {
-                                      return Padding(
-                                        padding: const EdgeInsets.only(right: 10, left: 10),
-                                        child: Card(
-                                          color: Colors.grey[100],
-                                          child: ListTile(
-                                            title: Column(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                              children: [
-                                                Text('Reason: ${transactions[index].reason}'),
-                                                Text( 'Date: ${DateFormat('dd MMMM yyyy').format(DateTime.parse(transactions[index].date))}',),
-                                              ],
-                                            ),
-                                            trailing: Text(
-                                              '${transactions[index].type == 'Income' ? '+' : '-'}BDT ${transactions[index].amount.toStringAsFixed(2)}',
-                                              style: TextStyle(
-                                                color: transactions[index].type == 'Income'
-                                                    ? Colors.green
-                                                    : Colors.red,
+                                  future:
+                                      ApiHelper.getTransactionsByName(empName),
+                                  builder: (context, snapshot) {
+                                    if (snapshot.connectionState ==
+                                        ConnectionState.waiting) {
+                                      // Show a loading widget while data is being fetched
+                                      return const Center(
+                                          child: CircularProgressIndicator(
+                                        color: Colors.green,
+                                        backgroundColor:
+                                            Colors.lightGreenAccent,
+                                      ));
+                                    } else if (snapshot.hasError) {
+                                      // Handle error case
+                                      return Center(
+                                          child:
+                                              Text('Error: ${snapshot.error}'));
+                                    } else if (!snapshot.hasData ||
+                                        snapshot.data!.isEmpty) {
+                                      // No transactions
+                                      return const Center(
+                                          child: Text(
+                                              'Transaction history is empty'));
+                                    } else {
+                                      // Display transactions
+                                      List<Transaction> transactions =
+                                          snapshot.data!;
+                                      return Expanded(
+                                        child: ListView.builder(
+                                          itemCount: transactions.length,
+                                          itemBuilder: (context, index) {
+                                            return Padding(
+                                              padding: const EdgeInsets.only(
+                                                  right: 10, left: 10),
+                                              child: Card(
+                                                color: Colors.grey[100],
+                                                child: ListTile(
+                                                  title: Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      Text(
+                                                          'Reason: ${transactions[index].reason}'),
+                                                      Text(
+                                                        'Date: ${transactions[index].date}',
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  trailing: Text(
+                                                    '${transactions[index].type == 'Income' ? '+' : '-'}BDT ${transactions[index].amount.toStringAsFixed(2)}',
+                                                    style: TextStyle(
+                                                      color: transactions[index]
+                                                                  .type ==
+                                                              'Income'
+                                                          ? Colors.green
+                                                          : Colors.red,
+                                                    ),
+                                                  ),
+                                                ),
                                               ),
-                                            ),
-                                          ),
+                                            );
+                                          },
                                         ),
                                       );
-                                    },
-                                  ),
-                                );
-                              }
-                            },
-                          ),
+                                    }
+                                  },
+                                ),
                         ],
                       ),
-      
                     ),
                   ],
                 );
